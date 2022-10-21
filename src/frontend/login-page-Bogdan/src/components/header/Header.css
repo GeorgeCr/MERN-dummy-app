@@ -1,0 +1,15 @@
+.title-component {
+  font-size: 50px;
+
+  margin: 120px auto;
+}
+
+.title {
+  margin-bottom: 40px;
+}
+
+.title-component hr {
+  width: 100px;
+
+  margin: auto;
+}

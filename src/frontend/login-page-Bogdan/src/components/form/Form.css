@@ -1,0 +1,27 @@
+.form {
+  display: flex;
+  flex-direction: column;
+
+  width: 450px;
+  margin: auto;
+
+  gap: 10px;
+
+  margin-bottom: 50px;
+}
+
+.input {
+  height: 45px;
+}
+
+.input:focus {
+  outline: none !important;
+  border: 2px solid blue;
+  box-shadow: 0 0 10px #719ece;
+}
+
+.btn {
+  height: 45px;
+  background-color: black;
+  color: white;
+}

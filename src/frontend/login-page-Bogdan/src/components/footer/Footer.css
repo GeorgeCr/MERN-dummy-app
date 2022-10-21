@@ -1,0 +1,12 @@
+.links {
+  display: flex;
+  flex-direction: column;
+  gap: 17px;
+}
+
+.link {
+  font-size: 20px;
+
+  color: black;
+  text-decoration: none;
+}
