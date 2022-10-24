@@ -3,6 +3,8 @@ const bodyParser = require("body-parser");
 const routes = require("../routes/index.js");
 const cors = require("cors");
 const session = require("express-session");
+const mongoose = require("mongoose");
+const CONNECTION_URI = require("../constants/index.js");
 
 const sessionConfig = {
   name: "web academy",
@@ -24,11 +26,22 @@ app.use(session(sessionConfig));
 // app.use(bodyParser.urlencoded());
 // app.set("x-powered-by", "me myself");
 
-routes(app);
+mongoose
+  .connect(CONNECTION_URI)
+  .then(() => {
+    routes(app);
 
-app.get("/health", (_req, res) => {
-  res.send("OK");
-});
+    app.get("/health", (_req, res) => {
+      res.send("OK");
+    });
+
+    app.listen(3000, () => {
+      console.log("App listenting on port 3000.");
+    });
+  })
+  .catch((err) => {
+    console.error("Db connection issue. " + err);
+  });
 
 // /auth
 
@@ -43,7 +56,3 @@ app.get("/health", (_req, res) => {
 //   //   res.set("Content-Type", "text/plain");
 //   res.send("<div>Hello world</div>");
 // });
-
-app.listen(3000, () => {
-  console.log("App listenting on port 3000.");
-});

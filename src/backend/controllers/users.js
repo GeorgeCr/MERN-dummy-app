@@ -1,4 +1,5 @@
 const { users } = require("../db/users.js");
+const Model = require("../db/models/index.js");
 
 const getUsersByCriteria = (req, res) => {
   console.log("entering get all users controller");
@@ -11,26 +12,55 @@ const getUsersByCriteria = (req, res) => {
     res.send("INVALID FILTER TYPE");
     return;
   }
-  console.log("query params", age, lessOrGreat);
-  //   if (lessOrGreat === "G") {
-  //   }
-  //   if (lessOrGreat === "L") {
-  //   }
-  const filteredUsers = users.filter((user) =>
-    inputLessOrGreat === "G" ? user.age >= age : user.age < age
+  const gteFilter = {
+    $gte: age,
+  };
+
+  const lteFilter = {
+    $lte: age,
+  };
+  Model.find(
+    {
+      age: inputLessOrGreat === "G" ? { ...gteFilter } : { ...lteFilter },
+    },
+    (err, users) => {
+      if (err) {
+        console.error(`Failed to retrieve users, ${err}`);
+        res.status(500).send(err);
+        return;
+      }
+      res.send(users);
+      return;
+    }
   );
-  res.send(filteredUsers);
-  return;
+  /**
+   * Deprecated
+   */
+  // const filteredUsers = users.filter((user) =>
+  //   inputLessOrGreat === "G" ? user.age >= age : user.age < age
+  // );
 };
 
 const createUser = (req, res) => {
-  const { id, name, age } = req.body;
-  users.push({
-    id,
-    name,
-    age,
-  });
-  res.status(201).send("User created.");
+  const { name, age } = req.body;
+  /**
+   * Deprecated
+   */
+  // users.push({
+  //   name,
+  //   age,
+  // });
+
+  // db insertion
+  console.log(Model, "model");
+  const Users = new Model({ name, age });
+  Users.save()
+    .then(() => {
+      res.status(201).send("User created.");
+    })
+    .catch((err) => {
+      res.status(500).send(`Failed to create user. ${err}`);
+    });
 };
 
 const getAllUsers = (_req, res) => {
@@ -56,9 +86,30 @@ const getUserById = (req, res) => {
   // req.params.id // 2
 };
 
+const updateUser = (req, res) => {
+  const { name } = req.query;
+  const { ...properties } = req.body;
+  Model.findOneAndUpdate(
+    {
+      name,
+    },
+    { ...properties },
+    (err) => {
+      if (err) {
+        console.error(`I've failed you, ${err}`);
+        res.status(500).send(err);
+        return;
+      }
+      res.send("Updated user.");
+      return;
+    }
+  );
+};
+
 module.exports = {
   getUsersByCriteria,
   createUser,
   getAllUsers,
   getUserById,
+  updateUser,
 };

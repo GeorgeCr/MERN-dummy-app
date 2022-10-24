@@ -5,6 +5,7 @@ const {
   createUser,
   getAllUsers,
   getUserById,
+  updateUser
 } = require("../controllers/users.js");
 const { isAuth } = require("../middlewares/index.js");
 
@@ -23,6 +24,8 @@ module.exports = (app) => {
   app.get("/users", getAllUsers);
 
   app.get("/users/:id", getUserById);
+
+  app.patch("/users", updateUser);
 
   app.post("/files", upload.single("uploaded_file"), (req, res) => {
     console.log(req.file);
