@@ -1,3 +1,5 @@
-const CONNECTION_URI = "mongodb+srv://georgecr98:<your_password>@nodejstalks.dxfpnrm.mongodb.net/?retryWrites=true&w=majority"
+const dotenv = require('dotenv');
 
-module.exports = CONNECTION_URI;
+dotenv.config();
+
+module.exports = process.env.CONNECTION_URI;
