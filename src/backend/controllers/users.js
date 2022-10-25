@@ -106,10 +106,34 @@ const updateUser = (req, res) => {
   );
 };
 
+
+const deleteUser = (req, res) => {
+  const { name } = req.query;
+  if (!name) {
+    res.status(400);
+    res.send('use "/delete?name=userName"');
+    return;
+  }
+  Model.findOneAndDelete({ name: name }, (err, item) => {
+    if (err) {
+      console.log('error to delete');
+    };
+    console.log(item);
+    if (!item)
+      return res.status(404).send(`user '${name}' not found!`)
+    console.log(`user '${item.name}' deleted`);
+    res.status(200).send(`user '${item.name}' deleted`);
+  });
+
+
+
+}
+
 module.exports = {
   getUsersByCriteria,
   createUser,
   getAllUsers,
   getUserById,
   updateUser,
+  deleteUser
 };

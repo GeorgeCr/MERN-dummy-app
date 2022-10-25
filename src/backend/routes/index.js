@@ -5,7 +5,8 @@ const {
   createUser,
   getAllUsers,
   getUserById,
-  updateUser
+  updateUser,
+  deleteUser
 } = require("../controllers/users.js");
 const { isAuth } = require("../middlewares/index.js");
 
@@ -34,6 +35,8 @@ module.exports = (app) => {
     return;
   });
 
+  app.delete("/delete", deleteUser);
+
   app.post("/authenticate", (req, res) => {
     console.log(`email: ${req.body.email}, password: ${req.body.password}`);
     const { email, password } = req.body;
@@ -44,7 +47,7 @@ module.exports = (app) => {
         res.status(500).send("Error when salting....");
         return;
       }
-      console.log(salt," salt here");
+      console.log(salt, " salt here");
       // hashing below
       bcrypt.hash(password, salt, (err, hash) => {
         if (err) {
